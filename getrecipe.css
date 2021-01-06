@@ -1,0 +1,255 @@
+html,body {
+    margin:0;
+    padding:0;
+    overflow-x:hidden;
+    padding:auto;
+    margin:auto;
+    text-align:center;
+    
+}
+
+span#card-title{
+    font-size: 1.2rem;
+    line-height: normal;
+    font-weight: 600;
+}
+
+p.card-text{
+    font-size: 1rem;
+    line-height: normal;
+    font-weight: 400;
+}
+
+.btn-floating i{
+    z-index: 1;  
+}
+
+.card.small{
+    border-radius: 1rem;
+  
+}
+
+.card-image{
+
+    border-top-left-radius: 1rem;
+    border-top-right-radius: 1rem;
+    
+}
+.card:hover{
+    cursor: pointer;
+    box-shadow: 0 0 20px rgb(75, 75, 75);
+}
+
+.carousel-container{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.right-button,.left-button{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* offset: ; */
+  padding: 0 0.5rem;
+  height: fit-content;
+  background-color: white;
+  border: none;
+  border-radius: 50%;
+  font-size: 2rem;
+  color: rgba(179, 178, 178, 0.5);
+}
+
+.right-button:hover,.left-button:hover{
+  cursor: pointer;
+  background-color: rgba(179, 178, 178, 0.5) ;
+  color: rgb(255, 255, 255);
+}
+
+.right-button:focus,.left-button:focus{
+  background-color: rgba(179, 178, 178, 0.5) ;
+  color: rgb(255, 255, 255);
+}
+
+
+.wrapper{
+  width: 90%;
+  height: 160px;
+  overflow-x: scroll;
+  overflow-y: hidden;
+}
+#saved-recipe-carousel{
+  display: flex;
+  width: 95%;
+  /* overflow-x: scroll; */
+  height: 100%;
+}
+
+.saved-recipe-carousel-card{
+  margin:0.5rem;
+}
+
+.saved-recipe-carousel-image:hover, .saved-recipe-carousel-title:hover{
+  cursor: pointer;
+  box-shadow: 0 0 10px rgb(75, 75, 75);
+}
+
+
+.wrapper::-webkit-scrollbar{
+  display: none;
+}
+
+.saved-recipe-carousel-image{
+  width: 150px;
+  height: 150px;
+  margin: 0;
+  border-radius: 50%;
+}
+
+.saved-recipe-carousel-title{
+  display: flex;
+  margin: 0;
+  position: relative;
+  width: 150px;
+  height: 150px;
+  --heightA: 150px;
+  top: calc(-80px - var(--heightA)/2);
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  background-color: rgba(100, 100, 100, 0.4);
+  color:white;
+  font-weight: 700;
+}
+
+
+
+
+.ingr-header-div {
+  padding-top: 10px;
+  font-weight: 600;
+  
+}
+
+.meth-header-div {
+  padding-top: 20px;
+  font-weight: 600;
+  
+}
+
+.save-recipe-button {
+  border-width: 0;
+  text-align: center;
+  position: absolute;
+  bottom: 260px;
+  right: 20px;
+  border-radius: 15px 15px 15px 15px;
+  /* padding: 0px; */
+  background-color: rgba(74, 75, 74, 0.8);
+  color:  white;
+  font-size: 1.5em;
+  padding: 4px 4px;
+  
+}
+
+
+.save-recipe-button:hover{
+  border-width: 0;
+  /* background-color: white; */
+  color: red;
+  border-radius: 15px 15px 15px 15px;
+  font-size: 1.5em;
+  text-align: center;
+  cursor: pointer;
+  box-shadow: 0 0 10px rgb(165, 165, 165);
+}
+
+
+.subscript{
+  font-size: xx-small;
+  color: rgb(160, 153, 153);
+}
+
+.info-div-parent{
+  display: flex; 
+  flex-direction: column;
+  justify-content: left;
+  text-align: left;
+  margin-left: 10px;
+  margin: none;
+}
+
+.info-div {
+  text-align: left;
+  justify-content: left;
+  margin: none;
+}
+
+.header-div h4{
+  margin: 0px;
+}
+
+#about-modal,#modal1 {
+  border-radius: 1rem;
+  overflow: hidden;
+  height: 100%;
+  max-height: 80%;
+  flex-direction: column;
+  box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 3px 1px -2px rgba(0,0,0,0.12), 0 1px 5px 0 rgba(0,0,0,0.2);
+}
+
+#recipe-modal-content,#about-modal-content {
+  overflow-y: scroll;
+  height: 68%;
+}
+
+#about-modal-content{
+  overflow-y: scroll;
+  height: 85%;
+}
+
+/* .modal .row {
+  height: 100%
+} */
+
+.modal .header-div {
+  margin-bottom: 10px;
+}
+
+
+.method-div {
+  margin-top: 20px;
+}
+
+.about-recipe:hover {
+  color: rgba(0, 0, 0, 0.507);
+  cursor: pointer;
+}
+
+.nutInfo-recipe:hover {
+  color: rgba(0, 0, 0, 0.507);
+  cursor: pointer;
+}
+
+#recipe-list-container{
+  display: none;
+}
+
+.container {
+  margin: 0 auto;
+  max-width: 90%;
+  width: 90%;
+}
+@media only screen and (min-width: 601px) {
+  .container {
+    width: 90%;
+  }
+}
+@media only screen and (min-width: 993px) {
+  .container {
+    width: 90%;
+  }
+}
+
