@@ -1,20 +1,25 @@
+//Declaration of variables and constants for API calls
 let appID = 'de24e9f5';
 let appKEY = '808b4ecac7df60930d1456576a2afadc';
 let ingredients = "";
 const spoonacularAPI = "59b7c5b4387043649860e827d13b1445"
 let isExisting = false;
 
+//Retrieving saved recipes from the local storage
 let favouriteRecipes = JSON.parse(localStorage.getItem('favouriteRecipes')) || [];
 
-let myspan=$("#alertspan");// the span where the warning message come if the ingredient or the list is empty
+// the span where the warning message come if the ingredient or the list is empty
+let myspan=$("#alertspan");
 
+//Fetch's ingredients from the users input list
 function getIngredientsList(){
     let ingredientsList = $('.ingredient-list');
     let ingredientsArray = [];
     
     if(ingredientsList.length == 0){
         myspan.text("please enter at least one ingredient")
-    }else{
+    }
+    else{
         myspan.text("")
         for(let j = 0; j < ingredientsList.length; j++){
         let text = ingredientsList[j].childNodes[0].data;
@@ -24,15 +29,16 @@ function getIngredientsList(){
     }   
 }
 
+
 function getURL(recipeObj){
     return recipeObj.url
 }
 
-//TODO: Function creating the Modal HTML components dynamically with jQuery
+//Function creating the Modal HTML Header components
 function populateModal(recipeObj){
     let modal = $("#recipe-modal-header")
     modal.text("");
-    //TODO: Standard elements of Modal containing the following
+    
     //Header div
     let headerDiv = $("<div>");
     headerDiv.addClass("header-div");
@@ -88,10 +94,11 @@ function populateModal(recipeObj){
     
 }
 
+//Function creating the Modal HTML about body components
 function populateAbout(recipeObj){
     let modal = $("#recipe-modal-content")
     modal.text("");
-    //TODO: About modal containing the following
+    
     //Div to store info 2 cols 
     let row = $("<div>");
     row.addClass("row")
@@ -146,6 +153,7 @@ function populateAbout(recipeObj){
     modal.append(row);
 }
 
+//Function creating the Modal HTML method/instructions body components
 function populateMethod(recipeObj) {
     let modal = $("#recipe-modal-content")
 
@@ -165,10 +173,11 @@ function populateMethod(recipeObj) {
 
 }
 
+//Function creating the Modal HTML nutritional body components
 function populateNutInfo(recipeObj){
     let modal = $("#recipe-modal-content")
     modal.text("");
-    //TODO: Nutritional info modal containing the following (Total, per serve and % daily)
+    //Nutritional info modal containing the following (Total, per serve and % daily)
     //Creating the table header items
     let tableDiv = $("<table>");
     let tableHeader = $("<thead>");
@@ -365,7 +374,7 @@ function populateNutInfo(recipeObj){
 }
 
 
-
+//Function that calls the API to search for recipe ideas and then another to retrieve info form Spoonacular
 function searchRecipes (){
     getIngredientsList();
     let getRecipesURL = `https://api.edamam.com/search?q=${ingredients}&app_id=${appID}&app_key=${appKEY}&to=12`
@@ -401,14 +410,22 @@ function searchRecipes (){
                 }
             });
             if(foundIndex !== -1){
-                let saveButton = divTwo.append($('<span>').attr({'class':'far fa-star saveIcon save-recipe-button', 'index':i, 'style':'background-color:rgba(75, 160, 41, 0.8)'}));
-            }else{
-                let saveButton = divTwo.append($('<span>').attr({'class':'far fa-star saveIcon save-recipe-button', 'index':i}));
+                let saveButton = $('<div>').attr({'class':'far fa-star saveIcon save-recipe-button', 'id': 'save-recipe-button', 'index':i, 'style':'background-color:rgba(75, 160, 41, 0.8)'});
+                let hoverInfo = saveButton.append($('<span>').attr({'class':'hoverSave', 'style':'display: none'}).text("Remove from favourites"));
+            
+                divTwo.append(saveButton);
+            }
+            else{
+                let saveButton = $('<div>').attr({'class':'far fa-star saveIcon save-recipe-button','id': 'save-recipe-button', 'index':i});
+                let hoverInfo = saveButton.append($('<span>').attr({'class':'hoverSave', 'style':'display: none'}).text("Add to favourites"));
+
+                divTwo.append(saveButton);
             }
             // check whether recipes has been saved before and change the star color
                
         }
-    
+        
+        //Click on the card to show Modal pop-up
         $(`.card.small`).on('click',function(event){
             // event.preventDefault();
             // console.log("Event: " + event);
@@ -424,11 +441,13 @@ function searchRecipes (){
 
             let recipeURL = "https://api.spoonacular.com/recipes/extract?apiKey=" + spoonacularAPI + "&url=" + getURL(response.hits[index].recipe);
             
+            //click onto the about tab in modal
             $(".about-recipe").on("click", function(){
                 populateAbout(response.hits[index].recipe);
         
             });
-        
+            
+            //click onto the nutinfo tab in modal
             $(".nutInfo-recipe").on("click", function(){
                 populateNutInfo(response.hits[index].recipe);
             
@@ -449,7 +468,7 @@ function searchRecipes (){
             
                 });
 
-            // $('.modal').modal() //this function will open the modal when click
+            
 
             }).catch(function(error) { 
                 console.log(error)
@@ -459,6 +478,7 @@ function searchRecipes (){
             $('#modal1').modal() //this function will open the modal when click
         });
         
+        //Save/remove the recipe if the star button is clicked
         $('.save-recipe-button').on('click',function(event){
             event.preventDefault();
             event.stopPropagation();
@@ -466,16 +486,17 @@ function searchRecipes (){
             if(backgroundColor === 'rgba(74, 75, 74, 0.8)'){
                 $(this).css('background-color','rgba(75, 160, 41, 0.8)');
                 console.log(`save recipe index ${$(event.target).attr('index')}`);
-                let index = $(event.target).attr('index');
+                let index = $(event.currentTarget).attr('index');
                 let savedRecipes = response.hits[index].recipe;
                 console.log(savedRecipes);
                 favouriteRecipes.push(savedRecipes);
                 localStorage.setItem('favouriteRecipes', JSON.stringify(favouriteRecipes));
                 console.log(favouriteRecipes);
                 displaySavedRecipes();
-            }else if( backgroundColor === 'rgba(75, 160, 41, 0.8)') {
+            }
+            else if( backgroundColor === 'rgba(75, 160, 41, 0.8)') {
                 $(this).css('background-color','rgba(74, 75, 74, 0.8)');
-                let index = $(event.target).attr('index');
+                let index = $(event.currentTarget).attr('index');
                 let foundIndex = favouriteRecipes.findIndex(function(post){
                     if(post.label == response.hits[index].recipe.label){
                         return true
@@ -489,20 +510,54 @@ function searchRecipes (){
 
         })
 
+        if($(window).width() > 992){
+            $('.save-recipe-button').mouseenter(function(event) {
+                event.stopPropagation();
+                event.preventDefault
+                console.log(response);
+                let backgroundColor = $(this).css('background-color');
+                if(backgroundColor === 'rgba(74, 75, 74, 0.8)') {
+                    $('.hoverSave').text("Add to favourites");
+                }
+                else if( backgroundColor === 'rgba(75, 160, 41, 0.8)') {
+                    $('.hoverSave').text("Remove from favourites");  
+                }
+                console.log("hover working")
+                $( this ).find( "span" ).attr({'style':'display: inline-flex'});
+            });
+            $('.save-recipe-button').mouseleave(function(event) {
+                event.stopPropagation();
+                event.preventDefault
+                console.log(response);
+                // $('.hoverSave').attr({'style':'display: none'});
+                console.log("hover out");
+                $( this ).find( "span" ).attr({'style':'display: none'});
+            });
+        }
+
     }).catch(function(error){
         console.log(error);
     });
 }
 
+//Adds ingredients to the fridge
 function addIngredient(){
     let ul = $('#list-of-ingredients');
+    // filter the input text and remove spaces, commas etc to single comma and split into new array
     let theItems = $('#textarea1').val();
-    let newDiv = $('<div>').attr('class','ingredient-list');
-    let removeButton = $('<button>').attr('class','remove-ingredient-button').text('x');
+        theItems = theItems.replace(/[\s,-/.]+/g, ',')
+    let arrayTheItems = theItems.split(',')
+    // filter the input text and remove spaces, commas etc to single comma and split into new array
+
+    for(j = 0; j < arrayTheItems.length; j++){
+        let newDiv = $('<div>').attr('class','ingredient-list');
+        let removeButton = $('<button>').attr('class','remove-ingredient-button').text('x');
+        
+        newDiv.text(arrayTheItems[j]);
+        newDiv.append(removeButton);
+        ul.append(newDiv);
+    }
     
-    newDiv.text(theItems);
-    newDiv.append(removeButton);
-    ul.append(newDiv);
     $('.remove-ingredient-button').on('click',function(event){
         event.preventDefault();
         // console.log(event);
@@ -510,19 +565,21 @@ function addIngredient(){
     })
 }
 
+//Ensures that the user enters atleast one ingredient 
 $('#btnadd').on('click',function(event){
     event.preventDefault();
     console.log(event);
     if($('#textarea1').val()===""){
         myspan.text("Please enter at least one ingredient!")
-    }else{
+    }
+    else{
         myspan.text("")
         addIngredient();
         $('#textarea1').val("");
     }
 })
 
-
+//allows user to use enter button to add ingredients
 $('#textarea1').keydown( function( event ) {
     if ( event.which === 13 ) {
         // Do something
@@ -531,7 +588,8 @@ $('#textarea1').keydown( function( event ) {
         console.log(event);
         if($('#textarea1').val()===""){
             myspan.text("Please enter at least one ingredient!")
-        }else{
+        }
+        else{
             myspan.text("")
             addIngredient();
             $('#textarea1').val("");
@@ -539,6 +597,7 @@ $('#textarea1').keydown( function( event ) {
     }
 });
 
+//searches for recipes when get recipe is clicked
 $('#get-recipe-button').on('click', function(event){
     event.preventDefault();
     console.log(event);
@@ -581,6 +640,7 @@ $('#get-recipe-button').on('click', function(event){
 // function to open modal when "About Reci-Bits" button on nav bar is clicked
 $('#about-modal').modal();
 
+//Adds the recipe to saved recipes when star is clicked
 function appendSavedRecipes(){
     for (let i = favouriteRecipes.length; i >= 0; i--){
         if(favouriteRecipes[i] !== undefined){
@@ -595,11 +655,6 @@ function appendSavedRecipes(){
     }
 }
 
-// $('#favourite-recipe-modal-button').on('click',function(event){
-//     $('.favourite-recipe').remove();
-//     appendSavedRecipes();
-//     $('#favourite-recipe-modal').modal();
-// })
 
 // hide left & right arrow button on carousel when viewport width less than 600px
 if($(window).width() < 600){
@@ -678,6 +733,10 @@ $('.dropdown-trigger').dropdown({
         })
     },
 });
+
+
+
+
 
 
 
